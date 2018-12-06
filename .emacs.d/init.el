@@ -2,18 +2,35 @@
 ;;
 ;; Copyright (c) 2012-2017 Sylvain Benner & Contributors
 ;;
-;; Author: Sylvain Benner <sylvain.benner@gmail.com>
-;; URL: https://github.com/syl20bnr/spacemacs
+;; Author: Alexandros Kourtis <<akourtisdev@gmail.com>>
+;; URL: https://github.com/akourtis98/spacemacs-config
 ;;
 ;; This file is not part of GNU Emacs.
 ;;
 ;;; License: GPLv3
 
 ;; Without this comment emacs25 adds (package-initialize) here
-;; (package-initialize)
+(package-initialize)
 
 ;; Increase gc-cons-threshold, depending on your system you may set it back to a
 ;; lower value in your dotfile (function `dotspacemacs/user-config')
+
+
+;; packages
+;; load emacs 24's package system. Add MELPA repository.
+(when (>= emacs-major-version 24)
+  (require 'package)
+  (add-to-list
+   'package-archives
+   ;; '("melpa" . "http://stable.melpa.org/packages/") ; many packages won't show if using stable
+   '("melpa" . "http://melpa.milkbox.net/packages/")
+   t))
+
+(custom-set-variables
+ '(eclim-eclipse-dirs '("/usr/bin/eclipse"))
+ '(eclim-executable "/usr/bin/eclipse/eclim"))
+
+
 (setq gc-cons-threshold 100000000)
 
 (defconst spacemacs-version         "0.200.13" "Spacemacs version.")
@@ -309,19 +326,155 @@
                     'java-mode (car x) (cdr x)))
         java/key-binding-prefixes))
 
+;; company
+;;
+(use-package company
+  :ensure t
+  :config
+  (global-company-mode t)
+  (setq company-idle-delay 0)
+  (setq company-minimum-prefix-length 3)
+  (setq company-backends
+        '((company-files
+           company-keywords
+           company-capf
+           company-yasnippet
+           )
+          (company-abbrev company-dabbrev))))
 
-;; packages
-(when (>= emacs-major-version 24)
-  (require 'package)
-  (package-initialize)
-  (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
-  (package-refresh-contents)
+(add-hook 'emacs-lisp-mode-hook (lambda () (set (make-local-variable 'company-backends) '(company-elisp))))
+
+
+;;
+;; change company complete common
+;;
+(advice-add 'company-complete-common :before (lambda () (setq my-company-point (point))))
+(advice-add 'company-complete-common :after (lambda () (when (equal my-company-point (point))
+                                                         (yas-expand))))
+
+
+;;
+;; projectile
+;;
+(use-package projectile
+  :ensure t
+  :bind-keymap
+  ("C-c p" . projectile-command-map)
+  :config
+  (projectile-mode t)
+  (setq projectile-completion-system 'ivy)
+  (use-package counsel-projectile
+    :ensure t)
   )
 
-(custom-set-variables
- '(eclim-eclipse-dirs '("/usr/bin/eclipse"))
- '(eclim-executable "/usr/bin/eclipse/eclim"))
 
-(require 'eclim)
-(setq eclimd-autostart t)
+;;
+;; auto insert
+;;
+(use-package autoinsert
+  :ensure t
+  :config
+  (setq auto-insert-query nil)
+  (setq auto-insert-directory (locate-user-emacs-file "template"))
+  (add-hook 'find-file-hook 'auto-insert)
+  (auto-insert-mode t)
+  )
 
+
+(require 'web-mode)
+(add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.[agj]sp\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
+
+(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+
+(setq web-mode-engines-alist
+      '(("php"    . "\\.phtml\\'")
+        ("blade"  . "\\.blade\\."))
+      )
+
+(add-to-list 'auto-mode-alist '("\\.api\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("/some/react/path/.*\\.js[x]?\\'" . web-mode))
+
+(setq web-mode-content-types-alist
+  '(("json" . "/some/path/.*\\.api\\'")
+    ("xml"  . "/other/path/.*\\.api\\'")
+    ("jsx"  . "/some/react/path/.*\\.js[x]?\\'")))
+
+(defun my-web-mode-hook ()
+"Hooks for Web mode."
+(setq web-mode-markup-indent-offset 2)
+)
+(add-hook 'web-mode-hook  'my-web-mode-hook)
+
+(setq web-mode-comment-style 2)
+
+(setq web-mode-extra-snippets
+      '(("erb" . (("toto" . "<% toto | %>\n\n<% end %>")))
+        ("php" . (("dowhile" . "<?php do { ?>\n\n<?php } while (|); ?>")
+                  ("debug" . "<?php error_log(__LINE__); ?>")))
+        ))
+
+(setq web-mode-extra-auto-pairs
+      '(("erb"  . (("beg" "end")))
+        ("php"  . (("beg" "end")
+                   ("beg" "end")))
+        ))
+
+(setq web-mode-enable-auto-pairing t)
+
+(setq web-mode-enable-css-colorization t)
+
+(setq web-mode-enable-current-element-highlight t)
+(setq web-mode-enable-current-column-highlight t)
+
+(setq web-mode-ac-sources-alist
+      '(("css" . (ac-source-css-property))
+        ("html" . (ac-source-words-in-buffer ac-source-abbrev))))
+
+(setq web-mode-ac-sources-alist
+      '(("php" . (ac-source-yasnippet ac-source-php-auto-yasnippets))
+        ("html" . (ac-source-emmet-html-aliases ac-source-emmet-html-snippets))
+        ("css" . (ac-source-css-property ac-source-emmet-css-snippets))))
+
+(add-hook 'web-mode-before-auto-complete-hooks
+          '(lambda ()
+             (let ((web-mode-cur-language
+                    (web-mode-language-at-pos)))
+               (if (string= web-mode-cur-language "php")
+                   (yas-activate-extra-mode 'php-mode)
+                 (yas-deactivate-extra-mode 'php-mode))
+               (if (string= web-mode-cur-language "css")
+                   (setq emmet-use-css-transform t)
+                 (setq emmet-use-css-transform nil)))))
+
+(use-package markdown-mode
+  :ensure t
+  :commands (markdown-mode gfm-mode)
+  :mode (("README\\.md\\'" . gfm-mode)
+         ("\\.md\\'" . markdown-mode)
+         ("\\.markdown\\'" . markdown-mode))
+  :init (setq markdown-command "multimarkdown"))
+
+
+(require 'flymd)
+
+ (defun my-flymd-browser-function (url)
+   (let ((browse-url-browser-function 'browse-url-firefox))
+     (browse-url url)))
+(setq flymd-browser-open-function 'my-flymd-browser-function)
+
+(defun my-flymd-browser-function (url)
+  (let ((process-environment (browse-url-process-environment)))
+    (apply 'start-process
+           (concat "firefox " url) nil
+           "firefox"
+           (list "--new-window" "--allow-file-access-from-files" url))))
+(setq flymd-browser-open-function 'my-flymd-browser-function)
+
+(provide 'init)
+;;; init.el ends here
