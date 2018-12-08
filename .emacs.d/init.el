@@ -30,7 +30,6 @@
  '(eclim-eclipse-dirs '("/usr/bin/eclipse"))
  '(eclim-executable "/usr/bin/eclipse/eclim"))
 
-
 (setq gc-cons-threshold 100000000)
 
 (defconst spacemacs-version         "0.200.13" "Spacemacs version.")
@@ -51,23 +50,15 @@
   (unless (server-running-p) (server-start)))
 
 
-(global-set-key (kbd "M-w") 'other-window)
+(global-set-key (kbd "C-`") 'other-window)
 
 (defun markdown-html (buffer)
   (princ (with-current-buffer buffer
            (format "<!DOCTYPE html><html><title>Impatient Markdown</title><xmp theme=\"united\" style=\"display:none;\"> %s  </xmp><script src=\"http://strapdownjs.com/v/0.2/strapdown.js\"></script></html>" (buffer-substring-no-properties (point-min) (point-max))))
          (current-buffer)))
 
-(load-theme 'tango-dark)
 
-
-
-					; jsp stuff
-					;
-					; functions to perform correct indentation of java code within a 
-					; JSP page. I can live without syntax coloring - I can't live 
-					; without proper indentation
-					;
+;; jsp indentaion
 (setq auto-mode-alist
       (cons '("\\.jsp\\'" . html-mode) auto-mode-alist))
 
@@ -93,7 +84,7 @@
            (start-java-tag (jsp-java-sob))
            (end-java-tag (jsp-java-eob)))
       (and (> current-point start-java-tag) 
-	   (< current-point end-java-tag)))))
+           (< current-point end-java-tag)))))
 
 
 (defun jsp-indent-java ()
@@ -210,100 +201,100 @@
                    '(eclim-mode (:eval (eclim-modeline-string))))
 
       (evil-define-key 'insert java-mode-map
-		       (kbd ".") 'spacemacs/java-completing-dot
-		       (kbd ":") 'spacemacs/java-completing-double-colon
-		       (kbd "M-.") 'eclim-java-find-declaration
-		       (kbd "M-,") 'pop-tag-mark
-		       (kbd "M-<mouse-3>") 'eclim-java-find-declaration
-		       (kbd "<mouse-8>") 'pop-tag-mark)
+        (kbd ".") 'spacemacs/java-completing-dot
+        (kbd ":") 'spacemacs/java-completing-double-colon
+        (kbd "M-.") 'eclim-java-find-declaration
+        (kbd "M-,") 'pop-tag-mark
+        (kbd "M-<mouse-3>") 'eclim-java-find-declaration
+        (kbd "<mouse-8>") 'pop-tag-mark)
 
       (evil-define-key 'normal java-mode-map
-		       (kbd "M-.") 'eclim-java-find-declaration
-		       (kbd "M-,") 'pop-tag-mark
-		       (kbd "M-<mouse-3>") 'eclim-java-find-declaration
-		       (kbd "<mouse-8>") 'pop-tag-mark)
+        (kbd "M-.") 'eclim-java-find-declaration
+        (kbd "M-,") 'pop-tag-mark
+        (kbd "M-<mouse-3>") 'eclim-java-find-declaration
+        (kbd "<mouse-8>") 'pop-tag-mark)
 
       (evil-define-key 'normal eclim-problems-mode-map
-		       (kbd "a") 'eclim-problems-show-all
-		       (kbd "e") 'eclim-problems-show-errors
-		       (kbd "g") 'eclim-problems-buffer-refresh
-		       (kbd "q") 'eclim-quit-window
-		       (kbd "w") 'eclim-problems-show-warnings
-		       (kbd "f") 'eclim-problems-toggle-filefilter
-		       (kbd "c") 'eclim-problems-correct
-		       (kbd "RET") 'eclim-problems-open-current)
+        (kbd "a") 'eclim-problems-show-all
+        (kbd "e") 'eclim-problems-show-errors
+        (kbd "g") 'eclim-problems-buffer-refresh
+        (kbd "q") 'eclim-quit-window
+        (kbd "w") 'eclim-problems-show-warnings
+        (kbd "f") 'eclim-problems-toggle-filefilter
+        (kbd "c") 'eclim-problems-correct
+        (kbd "RET") 'eclim-problems-open-current)
 
       (evil-define-key 'normal eclim-project-mode-map
-		       (kbd "N") 'eclim-project-create
-		       (kbd "m") 'eclim-project-mark-current
-		       (kbd "M") 'eclim-project-mark-all
-		       (kbd "u") 'eclim-project-unmark-current
-		       (kbd "U") 'eclim-project-unmark-all
-		       (kbd "o") 'eclim-project-open
-		       (kbd "c") 'eclim-project-close
-		       (kbd "i") 'eclim-project-info-mode
-		       (kbd "I") 'eclim-project-import
-		       (kbd "RET") 'eclim-project-goto
-		       (kbd "D") 'eclim-project-delete
-		       (kbd "p") 'eclim-project-update
-		       (kbd "g") 'eclim-project-mode-refresh
-		       (kbd "R") 'eclim-project-rename
-		       (kbd "q") 'eclim-quit-window)
+        (kbd "N") 'eclim-project-create
+        (kbd "m") 'eclim-project-mark-current
+        (kbd "M") 'eclim-project-mark-all
+        (kbd "u") 'eclim-project-unmark-current
+        (kbd "U") 'eclim-project-unmark-all
+        (kbd "o") 'eclim-project-open
+        (kbd "c") 'eclim-project-close
+        (kbd "i") 'eclim-project-info-mode
+        (kbd "I") 'eclim-project-import
+        (kbd "RET") 'eclim-project-goto
+        (kbd "D") 'eclim-project-delete
+        (kbd "p") 'eclim-project-update
+        (kbd "g") 'eclim-project-mode-refresh
+        (kbd "R") 'eclim-project-rename
+        (kbd "q") 'eclim-quit-window)
 
       (spacemacs/set-leader-keys-for-major-mode 'java-mode
-						"ea" 'eclim-problems-show-all
-						"eb" 'eclim-problems
-						"ec" 'eclim-problems-correct
-						"ee" 'eclim-problems-show-errors
-						"ef" 'eclim-problems-toggle-filefilter
-						"en" 'eclim-problems-next-same-window
-						"eo" 'eclim-problems-open
-						"ep" 'eclim-problems-previous-same-window
-						"ew" 'eclim-problems-show-warnings
+        "ea" 'eclim-problems-show-all
+        "eb" 'eclim-problems
+        "ec" 'eclim-problems-correct
+        "ee" 'eclim-problems-show-errors
+        "ef" 'eclim-problems-toggle-filefilter
+        "en" 'eclim-problems-next-same-window
+        "eo" 'eclim-problems-open
+        "ep" 'eclim-problems-previous-same-window
+        "ew" 'eclim-problems-show-warnings
 
-						"ds" 'start-eclimd
-						"dk" 'stop-eclimd
+        "ds" 'start-eclimd
+        "dk" 'stop-eclimd
 
-						"ff" 'eclim-java-find-generic
+        "ff" 'eclim-java-find-generic
 
-						"gt" 'eclim-java-find-type
+        "gt" 'eclim-java-find-type
 
-						"rc" 'eclim-java-constructor
-						"rg" 'eclim-java-generate-getter-and-setter
-						"rf" 'eclim-java-format
-						"ri" 'eclim-java-import-organize
-						"rj" 'eclim-java-implement
-						"rr" 'eclim-java-refactor-rename-symbol-at-point
+        "rc" 'eclim-java-constructor
+        "rg" 'eclim-java-generate-getter-and-setter
+        "rf" 'eclim-java-format
+        "ri" 'eclim-java-import-organize
+        "rj" 'eclim-java-implement
+        "rr" 'eclim-java-refactor-rename-symbol-at-point
 
-						"hc" 'eclim-java-call-hierarchy
-						"hh" 'eclim-java-show-documentation-for-current-element
-						"hi" 'eclim-java-hierarchy
-						"hu" 'eclim-java-find-references
+        "hc" 'eclim-java-call-hierarchy
+        "hh" 'eclim-java-show-documentation-for-current-element
+        "hi" 'eclim-java-hierarchy
+        "hu" 'eclim-java-find-references
 
-						"mi" 'spacemacs/java-maven-clean-install
-						"mI" 'spacemacs/java-maven-install
-						"mp" 'eclim-maven-lifecycle-phases
-						"mr" 'eclim-maven-run
-						"mR" 'eclim-maven-lifecycle-phase-run
-						"mt" 'spacemacs/java-maven-test
+        "mi" 'spacemacs/java-maven-clean-install
+        "mI" 'spacemacs/java-maven-install
+        "mp" 'eclim-maven-lifecycle-phases
+        "mr" 'eclim-maven-run
+        "mR" 'eclim-maven-lifecycle-phase-run
+        "mt" 'spacemacs/java-maven-test
 
-						"aa" 'eclim-ant-run
-						"ac" 'eclim-ant-clear-cache
-						"ar" 'eclim-ant-run
-						"av" 'eclim-ant-validate
+        "aa" 'eclim-ant-run
+        "ac" 'eclim-ant-clear-cache
+        "ar" 'eclim-ant-run
+        "av" 'eclim-ant-validate
 
-						"pb" 'eclim-project-build
-						"pc" 'eclim-project-create
-						"pd" 'eclim-project-delete
-						"pg" 'eclim-project-goto
-						"pi" 'eclim-project-import
-						"pj" 'eclim-project-info-mode
-						"pk" 'eclim-project-close
-						"po" 'eclim-project-open
-						"pp" 'eclim-project-mode
-						"pu" 'eclim-project-update
+        "pb" 'eclim-project-build
+        "pc" 'eclim-project-create
+        "pd" 'eclim-project-delete
+        "pg" 'eclim-project-goto
+        "pi" 'eclim-project-import
+        "pj" 'eclim-project-info-mode
+        "pk" 'eclim-project-close
+        "po" 'eclim-project-open
+        "pp" 'eclim-project-mode
+        "pu" 'eclim-project-update
 
-						"tt" 'eclim-run-junit))))
+        "tt" 'eclim-run-junit))))
 
 (defun java/post-init-ggtags ()
   (add-hook 'java-mode-local-vars-hook #'spacemacs/ggtags-mode-enable))
@@ -323,7 +314,7 @@
                                     ("mp" . "project")
                                     ("mt" . "test")))
   (mapc (lambda(x) (spacemacs/declare-prefix-for-mode
-                    'java-mode (car x) (cdr x)))
+                     'java-mode (car x) (cdr x)))
         java/key-binding-prefixes))
 
 ;; company
@@ -401,14 +392,14 @@
 (add-to-list 'auto-mode-alist '("/some/react/path/.*\\.js[x]?\\'" . web-mode))
 
 (setq web-mode-content-types-alist
-  '(("json" . "/some/path/.*\\.api\\'")
-    ("xml"  . "/other/path/.*\\.api\\'")
-    ("jsx"  . "/some/react/path/.*\\.js[x]?\\'")))
+      '(("json" . "/some/path/.*\\.api\\'")
+        ("xml"  . "/other/path/.*\\.api\\'")
+        ("jsx"  . "/some/react/path/.*\\.js[x]?\\'")))
 
 (defun my-web-mode-hook ()
-"Hooks for Web mode."
-(setq web-mode-markup-indent-offset 2)
-)
+  "Hooks for Web mode."
+  (setq web-mode-markup-indent-offset 2)
+  )
 (add-hook 'web-mode-hook  'my-web-mode-hook)
 
 (setq web-mode-comment-style 2)
@@ -463,9 +454,9 @@
 
 (require 'flymd)
 
- (defun my-flymd-browser-function (url)
-   (let ((browse-url-browser-function 'browse-url-firefox))
-     (browse-url url)))
+(defun my-flymd-browser-function (url)
+  (let ((browse-url-browser-function 'browse-url-firefox))
+    (browse-url url)))
 (setq flymd-browser-open-function 'my-flymd-browser-function)
 
 (defun my-flymd-browser-function (url)
@@ -475,6 +466,41 @@
            "firefox"
            (list "--new-window" "--allow-file-access-from-files" url))))
 (setq flymd-browser-open-function 'my-flymd-browser-function)
+
+
+(setq browse-url-browser-function 'w3m-browse-url)
+(autoload 'w3m-browse-url "w3m" "Ask a WWW browser to show a URL." t)
+;; optional keyboard short-cut
+(global-set-key "\C-xm" 'browse-url-at-point)
+
+(setq vue-mode-packages
+      '(vue-mode))
+
+(setq vue-mode-excluded-packages '())
+
+(defun vue-mode/init-vue-mode ()
+  "Initialize my package"
+  (use-package vue-mode))
+
+
+(defun vue-mode/init-vue-mode ()
+  (use-package vue-mode
+    :config
+    ;; 0, 1, or 2, representing (respectively) none, low, and high coloring
+    (setq mmm-submode-decoration-level 0)))
+
+(add-hook 'mmm-mode-hook
+          (lambda ()
+            (set-face-background 'mmm-default-submode-face "#fafafa")))
+
+;; about org-mode
+(add-hook 'org-mode-hook 'turn-on-auto-fill)
+(add-hook 'org-mode-hook 'flyspell-mode)
+
+(setq auto-mode-alist
+      (cons '("\\.org" . org-mode)auto-mode-alist))
+
+(global-set-key "\M-p" 'org-insert-property-drawer)
 
 (provide 'init)
 ;;; init.el ends here

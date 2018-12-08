@@ -1,8 +1,11 @@
-;; -*- mode: emacs-lisp -*-
-;; This file is loaded by Spacemacs at startup.
-;; It must be stored in your home directory.
+(when (>= emacs-major-version 24)
+  (require 'package)
+  (add-to-list
+   'package-archives
+   ;; '("melpa" . "http://stable.melpa.org/packages/") ; many packages won't show if using stable
+   '("melpa" . "http://melpa.milkbox.net/packages/")
+   t))
 
-;; load emacs 24's package system. Add MELPA repository.
 
 (defun dotspacemacs/layers ()
   "Configuration Layers declaration.
@@ -33,6 +36,34 @@ values."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
+     html
+     html
+     html
+     markdown
+     javascript
+     javascript
+     javascript
+     javascript
+     javascript
+     markdown
+     markdown
+     markdown
+     markdown
+     markdown
+     markdown
+     markdown
+     html
+     markdown
+     markdown
+     markdown
+     markdown
+     markdown
+     markdown
+     markdown
+     html
+   markdown
+     markdown
+     markdown
      html
      html
      html
@@ -143,7 +174,9 @@ values."
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press <SPC> T n to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(spacemacs-light
+   dotspacemacs-themes '(wombat
+                         deeper-blue
+                         spacemacs-light
                          spacemacs-dark)
    ;; If non nil the cursor color matches the state color in GUI Emacs.
    dotspacemacs-colorize-cursor-according-to-state t
@@ -315,7 +348,7 @@ values."
 It is called immediately after `dotspacemacs/init', before layer configuration
 executes.
  This function is mostly useful for variables that need to be set
-before packages are loaded. If you are unsure, you should try in setting them in
+before packages are loaded. If you are unsure, you should try in setting theme in
 `dotspacemacs/user-config' first."
   )
 
@@ -378,14 +411,18 @@ or the current buffer directory."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(evil-want-Y-yank-to-eol nil)
+ '(eclim-eclipse-dirs (quote ("/usr/bin/eclipse")))
+ '(eclim-executable "/usr/bin/eclipse/eclim")
  '(package-selected-packages
    (quote
-    (eclim ws-butler winum which-key web-mode volatile-highlights vi-tilde-fringe uuidgen use-package toc-org term+mux tagedit spaceline slim-mode scss-mode sass-mode restart-emacs ranger rainbow-delimiters pug-mode popwin persp-mode pcre2el paradox org-plus-contrib org-ehtml org-bullets open-junk-file neotree multi-web-mode move-text mmm-mode markdown-toc macrostep lsp-java lorem-ipsum linum-relative link-hint less-css-mode indent-guide impatient-mode image-dired+ hungry-delete http html5-schema hl-todo highlight-parentheses highlight-numbers highlight-indentation helm-themes helm-swoop helm-projectile helm-mt helm-mode-manager helm-make helm-flx helm-descbinds helm-css-scss helm-ag goto-gem google-translate golden-ratio gh-md flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu emmet-mode elisp-slime-nav dumb-jump diminish define-word crappy-jsp-mode column-enforce-mode clean-aindent-mode auto-highlight-symbol auto-compile aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line))))
+    (json-mode ws-butler winum which-key web-mode w3m w3 vue-mode volatile-highlights vi-tilde-fringe uuidgen use-package toc-org term+mux tagedit spaceline slim-mode scss-mode sass-mode restart-emacs ranger rainbow-delimiters pug-mode popwin persp-mode pcre2el paradox org-plus-contrib org-ehtml org-bullets open-junk-file neotree multi-web-mode move-text markdown-toc macrostep lsp-java lorem-ipsum linum-relative link-hint less-css-mode indent-guide impatient-mode image-dired+ hungry-delete http html5-schema hl-todo highlight-parentheses highlight-numbers highlight-indentation helm-themes helm-swoop helm-projectile helm-mt helm-mode-manager helm-make helm-flx helm-descbinds helm-css-scss helm-ag goto-gem google-translate golden-ratio gh-md flymd flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu emmet-mode elisp-slime-nav eclim dumb-jump diminish define-word crappy-jsp-mode counsel-projectile company column-enforce-mode clean-aindent-mode auto-highlight-symbol auto-compile aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line))))
 
 (defun rename-term (name)
   (interactive "s")
   (rename-buffer (concat "*term* " name)))
+
+(require 'eclim)
+(setq eclimd-autostart t)
 
 (setq help-at-pt-display-when-idle t)
 (setq help-at-pt-timer-delay 0.1)
@@ -404,3 +441,6 @@ or the current buffer directory."
 (company-emacs-eclim-setup)
 (company-emacs-eclim-ignore-case t)
 (global-company-mode t)
+
+
+dotspacemacs-additional-packages '(vue-mode)
