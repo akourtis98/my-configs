@@ -1,1 +1,1 @@
-## This are my configs for emacs/spacemacs
+## These are my configs for emacs/spacemacs
